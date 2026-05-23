@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Empresario – Juego de Educación Financiera</title>
+  <meta name="description" content="Mini Empresario: aprende a ahorrar, invertir y gastar responsablemente en este juego educativo para niños." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================== PANTALLA DE LOGIN / REGISTRO ===================== -->
+  <div id="screen-login" class="screen active">
+    <header class="app-header">
+      <div class="logo-text">MINI EMPRESARIO</div>
+      <div class="header-icons">
+        <span class="icon-circle">🔐</span>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="stars">✨ ✨ ✨</div>
+    </div>
+
+    <div class="login-content">
+      <div class="floating-logo">
+        <h1 class="bounce-in">
+          <span class="gold-text">MINI</span> <span class="gold-text">EMPRESARIO</span>
+        </h1>
+        <div class="logo-stars">⭐⭐⭐</div>
+      </div>
+
+      <!-- Login Mode -->
+      <div id="login-mode" class="login-card glass-card bounce-in">
+        <div class="login-header-icon">👋</div>
+        <h2>¡Hola de nuevo!</h2>
+        <p class="login-subtitle">Selecciona tu cuenta para jugar</p>
+
+        <div id="existing-users-list" class="existing-users-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="login-divider">
+          <span>o</span>
+        </div>
+
+        <button class="btn-secondary btn-squish" onclick="showRegisterMode()">
+          ✨ Crear cuenta nueva
+        </button>
+
+        <div id="login-no-users" class="login-no-users" style="display:none">
+          <div class="login-no-users-emoji">🌟</div>
+          <p>¡Aún no hay cuentas! Crea la tuya para empezar.</p>
+          <button class="btn-primary btn-squish" onclick="showRegisterMode()">
+            ✨ Crear mi cuenta
+          </button>
+        </div>
+      </div>
+
+      <!-- Register Mode -->
+      <div id="register-mode" class="login-card glass-card bounce-in" style="display:none">
+        <div class="login-header-icon">🎉</div>
+        <h2>¡Crea tu cuenta!</h2>
+        <p class="login-subtitle">Elige tu nombre y avatar para empezar la aventura</p>
+
+        <div class="register-form">
+          <label class="input-label" for="input-username">Tu nombre de empresario</label>
+          <div class="input-wrapper">
+            <span class="input-icon">✏️</span>
+            <input type="text" id="input-username" class="input-field" placeholder="Ej: Juanito" maxlength="15" autocomplete="off" />
+          </div>
+          <div id="username-error" class="input-error" style="display:none"></div>
+
+          <label class="input-label">Elige tu avatar</label>
+          <div id="avatar-grid" class="avatar-grid">
+            <button class="avatar-option selected" data-avatar="👦" onclick="selectAvatar(this)">👦</button>
+            <button class="avatar-option" data-avatar="👧" onclick="selectAvatar(this)">👧</button>
+            <button class="avatar-option" data-avatar="🧒" onclick="selectAvatar(this)">🧒</button>
+            <button class="avatar-option" data-avatar="👶" onclick="selectAvatar(this)">👶</button>
+            <button class="avatar-option" data-avatar="🧑‍🎓" onclick="selectAvatar(this)">🧑‍🎓</button>
+            <button class="avatar-option" data-avatar="🦸‍♂️" onclick="selectAvatar(this)">🦸‍♂️</button>
+            <button class="avatar-option" data-avatar="🦸‍♀️" onclick="selectAvatar(this)">🦸‍♀️</button>
+            <button class="avatar-option" data-avatar="🐱" onclick="selectAvatar(this)">🐱</button>
+            <button class="avatar-option" data-avatar="🐶" onclick="selectAvatar(this)">🐶</button>
+            <button class="avatar-option" data-avatar="🦊" onclick="selectAvatar(this)">🦊</button>
+            <button class="avatar-option" data-avatar="🐸" onclick="selectAvatar(this)">🐸</button>
+            <button class="avatar-option" data-avatar="🦄" onclick="selectAvatar(this)">🦄</button>
+          </div>
+
+          <button id="btn-register" class="btn-primary btn-squish" onclick="registerUser()">
+            🚀 ¡Crear cuenta y jugar!
+          </button>
+        </div>
+
+        <button class="btn-link" onclick="showLoginMode()">
+          ← Ya tengo cuenta
+        </button>
+      </div>
+    </div>
+
+    <div class="floor-curve"></div>
+  </div>
+
+  <!-- ===================== PANTALLA DE RANKING ===================== -->
+  <div id="screen-ranking" class="screen">
+    <header class="app-header">
+      <div class="logo-text">🏆 RANKING</div>
+      <div class="header-icons">
+        <button class="btn-back-header btn-squish" onclick="showScreen('screen-welcome')">← Volver</button>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+    </div>
+
+    <div class="ranking-content">
+      <div class="ranking-title-section bounce-in">
+        <div class="ranking-trophy">🏆</div>
+        <h2>Mejores Empresarios</h2>
+        <p class="ranking-subtitle">¿Quién es el mejor administrando dinero?</p>
+      </div>
+
+      <div id="ranking-list" class="ranking-list">
+        <!-- Populated by JS -->
+      </div>
+
+      <div id="ranking-empty" class="ranking-empty glass-card" style="display:none">
+        <div class="ranking-empty-emoji">📊</div>
+        <p>¡Aún no hay resultados! Juega una partida para aparecer aquí.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PANTALLA DE BIENVENIDA ===================== -->
+  <div id="screen-welcome" class="screen">
+    <header class="app-header">
+      <div class="logo-text">MINI EMPRESARIO</div>
+      <div class="header-icons">
+        <span id="welcome-user-name" class="header-user-name"></span>
+        <div id="welcome-user-avatar" class="user-avatar">👦</div>
+        <button class="btn-logout-header btn-squish" onclick="logoutUser()" title="Cerrar sesión">🚪</button>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="stars">✨ ✨ ✨</div>
+    </div>
+    
+    <div class="welcome-content">
+      <div class="floating-logo">
+        <h1 class="bounce-in">
+          <span class="gold-text">MINI</span> <span class="gold-text">EMPRESARIO</span>
+        </h1>
+        <div class="logo-stars">⭐⭐⭐</div>
+      </div>
+
+      <div class="welcome-card fade-in glass-card">
+        <div class="character-welcome" id="welcome-char">🧒💼</div>
+        <h2 id="welcome-greeting">¡Bienvenido, pequeño empresario!</h2>
+        <p>Recibirás <strong class="highlight-gold">$10 diarios</strong> y podrás invertir, ahorrar o gastar durante <strong>5 días</strong>. ¡Los negocios son impredecibles!</p>
+
+        <!-- User best score pill -->
+        <div id="welcome-best-score" class="welcome-best-score" style="display:none">
+          <span>🏅</span> Tu mejor puntaje: <strong id="welcome-best-value">$0</strong>
+        </div>
+        
+        <div class="tags-row">
+          <span class="tag-invest">INVERTIR</span>
+          <span class="tag-spend">GASTAR</span>
+          <span class="tag-save">AHORRAR</span>
+        </div>
+
+        <div class="warning-pill">
+          <span>🧠</span> ¡Cada decisión tiene consecuencias!
+        </div>
+
+        <div class="warning-pill" style="margin-top:8px">
+          <span>🎲</span> ¡Los negocios pueden ganar o perder!
+        </div>
+
+        <button id="btn-start" class="btn-primary btn-squish" onclick="startGame()">
+          ¡Empezar a jugar! 🚀
+        </button>
+
+        <div class="welcome-extra-buttons">
+          <button class="btn-ranking btn-squish" onclick="showRankingScreen()">
+            🏆 Ver Ranking
+          </button>
+          <button class="btn-history btn-squish" onclick="showMyHistory()">
+            📊 Mi Historial
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="floor-curve"></div>
+    <div class="bottom-nav">
+      <div class="nav-item">🏦<span>APRENDE</span></div>
+      <div class="nav-item">🛒<span>COMPRA</span></div>
+      <div class="nav-item active">📈<span>CRECE</span></div>
+      <div class="audio-btn">🔊</div>
+    </div>
+  </div>
+
+  <!-- ===================== PANTALLA: SELECCIÓN DE UBICACIÓN ===================== -->
+  <div id="screen-location" class="screen">
+    <header class="app-header">
+      <div class="logo-text">📍 UBICACIÓN</div>
+      <div class="header-icons">
+        <div class="user-avatar dynamic-avatar">👦</div>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+    </div>
+
+    <div class="location-content">
+      <div class="location-title-section bounce-in">
+        <div class="location-title-emoji">🗺️</div>
+        <h2>¿Dónde abrirás tu negocio?</h2>
+        <p class="location-subtitle">La ubicación afecta tus clientes, ganancias y costos diarios</p>
+      </div>
+
+      <div id="location-cards" class="location-cards-container">
+        <!-- Populated by JS -->
+      </div>
+
+      <button id="btn-location-go" class="btn-primary btn-squish location-go-btn" disabled onclick="confirmLocation()">
+        Elige una ubicación...
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== PANTALLA: NOTICIAS DEL MERCADO ===================== -->
+  <div id="screen-news" class="screen">
+    <header class="app-header">
+      <div class="logo-text">MINI EMPRESARIO</div>
+      <div class="header-icons">
+        <span class="icon-circle">⭐</span>
+        <div class="user-avatar dynamic-avatar">👦</div>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+    </div>
+
+    <div class="news-main">
+      <!-- Salary notification -->
+      <div class="salary-pill bounce-in">
+        <span>💵</span> ¡Recibiste tu sueldo diario de <strong>$10</strong>!
+      </div>
+
+      <!-- Day header -->
+      <div class="news-day-header">
+        <span class="news-day-badge">📅 Día <span id="news-day">1</span> de 5</span>
+        <span class="news-money-badge">💰 Tu dinero: <strong id="news-money">$60</strong></span>
+      </div>
+
+      <!-- Newspaper card -->
+      <div class="newspaper-card sticker-mat pop-in">
+        <div class="newspaper-header">
+          <div class="newspaper-title">📰 NOTICIAS DEL MERCADO</div>
+          <div class="newspaper-date">Edición de hoy</div>
+        </div>
+        <div class="news-event-emoji" id="news-emoji">🎪</div>
+        <h2 class="news-event-title" id="news-title">¡Hay feria en el parque!</h2>
+        <p class="news-event-desc" id="news-desc">Más clientes hoy. Tu negocio tiene mayor probabilidad de éxito.</p>
+        <div class="news-effect-pill" id="news-effect">✅ +15% probabilidad de éxito</div>
+      </div>
+
+      <!-- Optional Challenge Card -->
+      <div class="challenge-card glass-card pop-in-delay">
+        <div class="challenge-header">
+          <span class="challenge-badge">🎯 RETO OPCIONAL</span>
+          <span class="challenge-stars">+⭐ si ganas</span>
+        </div>
+        <p class="challenge-question" id="challenge-question">¿Apostamos $10 extra al negocio de hoy?</p>
+        <div class="challenge-stakes">
+          <div class="stake-box stake-win">Si ganas: <strong id="challenge-win">+$18 y ⭐</strong></div>
+          <div class="stake-box stake-lose">Si pierdes: <strong id="challenge-lose">-$10</strong></div>
+        </div>
+        <p class="challenge-canafford" id="challenge-canafford" style="display:none">⚠️ No tienes suficiente dinero para este reto</p>
+        <div class="challenge-buttons">
+          <button id="btn-challenge-yes" class="btn-challenge-yes btn-squish" onclick="decideChallenge(true)">
+            ✅ ¡Acepto el reto!
+          </button>
+          <button class="btn-challenge-no btn-squish" onclick="decideChallenge(false)">
+            ⏭️ Saltar reto
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PANTALLA PRINCIPAL DEL JUEGO ===================== -->
+  <div id="screen-game" class="screen">
+    <header class="app-header">
+      <div class="logo-text">MINI EMPRESARIO</div>
+      <div class="header-icons">
+        <span id="stars-display" class="stars-header">—</span>
+        <div class="user-avatar dynamic-avatar">👦</div>
+      </div>
+    </header>
+
+    <div class="status-bar">
+      <div class="status-item">
+        <span class="status-icon">💰</span>
+        <span>Dinero: </span><span id="money-display" class="status-value">$50</span>
+      </div>
+      <div class="status-item calendar-badge">
+        <span class="status-icon">📅</span>
+        <span>Día </span><span id="day-display">1</span><span> de 5</span>
+      </div>
+    </div>
+
+    <!-- Event + Location badges -->
+    <div class="event-badge-bar">
+      <span id="location-badge" class="location-badge" style="display:none">🏠 Ubicación</span>
+      <span id="event-badge" class="event-badge">🎪 Evento del día</span>
+    </div>
+
+    <!-- Challenge result notification -->
+    <div id="challenge-notif" class="challenge-notif" style="display:none"></div>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1" style="top: 15%; left: 8%;"></div>
+      <div class="cloud cloud-2" style="top: 25%; right: 12%;"></div>
+    </div>
+
+    <div class="game-main">
+      <div class="top-story-section">
+        <div class="character-section">
+           <div id="tienda-emoji" class="tienda-art">
+             <div class="tienda-scene">
+               <div class="tienda-awning">🏪</div>
+               <div class="shop-sign">Mi Tienda</div>
+               <div class="tienda-character">🧑‍🍳</div>
+             </div>
+           </div>
+        </div>
+
+        <div class="question-bubble-wrapper">
+          <div class="question-bubble pop-in">
+            <h2 id="question-text">¿Qué quieres hacer con tu dinero?</h2>
+          </div>
+          <div class="bubble-pointer"></div>
+        </div>
+      </div>
+
+      <div class="cards-container" id="cards-container">
+        <!-- Carta 1: Invertir -->
+        <div class="decision-card card-invest sticker-mat" id="card-invest" onclick="makeDecision('invest')">
+          <div class="card-icon-circle green-bg">🛒</div>
+          <div class="card-title">Comprar Jugos para Vender</div>
+          <div class="card-illustration">
+            <span class="card-illo-main" id="invest-emoji">🧃</span>
+          </div>
+          <div class="card-random-badge">🎲 Resultado aleatorio</div>
+          <div class="card-price pill-green" id="invest-price">Costo: $30 → Gana hasta $20</div>
+        </div>
+
+        <!-- Carta 2: Gastar -->
+        <div class="decision-card card-spend sticker-mat" id="card-spend" onclick="makeDecision('spend')">
+          <div class="card-icon-circle red-bg">🤖</div>
+          <div class="card-title">Comprar un Juguete</div>
+          <div class="card-illustration">
+            <span class="card-illo-main" id="spend-emoji">🤖</span>
+          </div>
+          <div class="card-price pill-red" id="spend-price">$50</div>
+        </div>
+
+        <!-- Carta 3: Ahorrar -->
+        <div class="decision-card card-save sticker-mat" id="card-save" onclick="makeDecision('save')">
+          <div class="card-icon-circle blue-bg">🐷</div>
+          <div class="card-title">Ahorrar en la Alcancía</div>
+          <div class="card-illustration">
+            <span class="card-illo-main">🐷</span>
+          </div>
+          <div class="card-action pill-blue" id="save-action">Guardar $50 ▶</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-floor">
+      <div class="floor-nav-pill">
+        <div class="floor-item"><span>🏪</span>Shop</div>
+        <div class="floor-item"><span>🧸</span>Toys</div>
+        <div class="floor-item active-gold"><span>🏦</span>Bank</div>
+        <div class="floor-item"><span>🏆</span>Goals</div>
+      </div>
+    </div>
+
+    <div class="tip-bar glass-tip pop-in-delay">
+      <div class="tip-content">
+        <span class="tip-icon">💡</span>
+        <span id="tip-text" class="tip-text">Invertir en algo que puedes vender te ayudará a ganar más dinero.</span>
+      </div>
+      <button id="btn-continue" class="btn-squish btn-green-small" style="display:none" onclick="nextRound()">
+        Continuar ▶
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== PANTALLA DE RESULTADO ===================== -->
+  <div id="screen-result" class="screen">
+    <header class="app-header">
+      <div class="logo-text">MINI EMPRESARIO</div>
+      <div class="header-icons">
+        <span class="icon-circle">🎫</span>
+        <div class="user-avatar dynamic-avatar">👦</div>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1" style="top: 10%; left: 5%;"></div>
+      <div class="cloud cloud-2" style="top: 25%; right: 15%;"></div>
+    </div>
+
+    <div class="result-content">
+      <div class="result-card sticker-mat bounce-in gold-glow">
+        <div class="result-badge-top">🎖️</div>
+        <div id="result-emoji" class="result-emoji">🧃🎉</div>
+        <div id="result-outcome-badge" class="outcome-badge" style="display:none">🎲 Éxito Total</div>
+        <h2 id="result-title">¡Gran inversión!</h2>
+        <p id="result-description">¡Excelente decisión!</p>
+        
+        <div class="result-money-box">
+          <span class="coin-icon">💰</span>
+          <span id="result-money-change-text" class="money-gained">+$20</span>
+        </div>
+        
+        <div class="result-total-badge">
+          <span>🏦 Tu dinero ahora: </span>
+          <span id="result-total-money">$70</span>
+        </div>
+        
+        <!-- Detailed invest feedback section -->
+        <div id="result-feedback" class="result-feedback" style="display:none"></div>
+        
+        <button class="btn-primary btn-squish" onclick="continueFromResult()">
+          Ver mi negocio 🏪
+        </button>
+      </div>
+    </div>
+    
+    <div class="floor-curve"></div>
+  </div>
+
+  <!-- ===================== PANTALLA: MI NEGOCIO ===================== -->
+  <div id="screen-shop" class="screen">
+    <header class="app-header">
+      <div class="logo-text">MI NEGOCIO</div>
+      <div class="header-icons">
+        <div class="user-avatar dynamic-avatar">👦</div>
+      </div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+    </div>
+
+    <div class="shop-main">
+      <!-- Top info -->
+      <div class="shop-header-row">
+        <div class="shop-info-pill">📅 Día <span id="shop-day">1</span> de 5 completado</div>
+        <div class="shop-info-pill">💰 <span id="shop-money">$60</span></div>
+        <div class="shop-info-pill">⭐ Bonus: <span id="shop-stars-bonus">0</span></div>
+      </div>
+
+      <!-- Shop panel -->
+      <div class="shop-panel sticker-mat bounce-in">
+        <div class="shop-char-section">
+          <div id="shop-char" class="shop-char-emoji">🧑‍🍳</div>
+          <div class="shop-char-name">Mi Tienda</div>
+          <div id="shop-mood" class="shop-mood">😄 ¡Tu negocio está prosperando!</div>
+        </div>
+
+        <div class="shop-level-section">
+          <div class="shop-level-label">📊 Nivel del negocio</div>
+          <div id="shop-level-stars" class="shop-level-stars">⭐⭐☆☆☆</div>
+        </div>
+
+        <div class="shop-history-section">
+          <div class="shop-history-label">📈 Historial de ganancias</div>
+          <div id="shop-history" class="shop-history-bars"></div>
+        </div>
+      </div>
+
+      <!-- Financial tip -->
+      <div class="shop-tip glass-card">
+        <span class="tip-icon">🧠</span>
+        <p class="shop-tip-text">Los buenos empresarios analizan sus resultados cada día para mejorar sus decisiones.</p>
+      </div>
+
+      <button id="btn-shop-next" class="btn-primary btn-squish shop-next-btn" onclick="shopContinue()">
+        Ir al Día 2 →
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== PANTALLA FINAL ===================== -->
+  <div id="screen-end" class="screen">
+    <header class="app-header">
+      <div class="logo-text">MINI EMPRESARIO</div>
+    </header>
+
+    <div class="sky-bg">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="stars">✨ ✨ ✨</div>
+    </div>
+    
+    <div class="end-content">
+      <div class="end-card sticker-mat bounce-in gold-glow">
+        <div id="end-emoji" class="end-emoji">🏆</div>
+        <h1 id="end-title">¡Felicidades!</h1>
+        <p id="end-subtitle" class="text-muted">¡Terminaste los 5 días!</p>
+        
+        <div class="end-stats">
+          <div class="stat-box">
+            <div class="stat-label">Empezaste con</div>
+            <div class="stat-value">$50</div>
+          </div>
+          <div class="stat-arrow">→</div>
+          <div class="stat-box primary-container">
+            <div class="stat-label">Terminaste con</div>
+            <div id="end-money" class="stat-value">$50</div>
+          </div>
+        </div>
+        
+        <div id="end-bonus-stars" class="end-bonus-stars">⭐ Estrellas bonus ganadas: 0</div>
+        <div id="end-badge" class="end-badge-text"></div>
+        <p id="end-message" class="end-message">¡Excelente manejo de tu dinero!</p>
+        
+        <div class="end-lesson glass-card">
+          <strong>🧠 Lo que aprendiste:</strong>
+          <ul id="lessons-list">
+            <li>Invertir genera ganancias pero tiene riesgos</li>
+            <li>Ahorrar da seguridad financiera</li>
+            <li>Los negocios dependen del mercado</li>
+          </ul>
+        </div>
+
+        <!-- User history section -->
+        <div id="end-history" class="end-history-section glass-card" style="display:none">
+          <strong>📊 Tus últimas partidas:</strong>
+          <div id="end-history-list" class="end-history-list"></div>
+        </div>
+        
+        <div class="end-buttons-row">
+          <button class="btn-primary btn-squish" onclick="resetGame()">
+            🔄 Jugar de nuevo
+          </button>
+          <button class="btn-secondary btn-squish" onclick="goToWelcome()">
+            🏠 Menú principal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
